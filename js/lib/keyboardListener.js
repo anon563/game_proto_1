@@ -1,6 +1,6 @@
 class KeyboardListener {
     keys = { left: false, up: false, right: false, down: false, a: false, b: false, start: false }
-    keyCodes = { ArrowLeft: "left", ArrowUp: "up", ArrowRight: "right", ArrowDown: "down", " ": "a", z: "b", Enter: "start" }
+    keyCodes = { ArrowLeft: "left", ArrowUp: "up", ArrowRight: "right", ArrowDown: "down", z: "a", x: "b", Enter: "start" }
 
     constructor() {
         document.body.onkeydown = event => this.handler(event);
