@@ -10,7 +10,7 @@ class Fuutan {
     
     dir = new Vector3D(1, 0, 0);
     vel = new Vector3D(0, 0, 0);
-    pos = new Vector3D(0, 0, 0);
+    pos = new Vector3D(32, 128, 0);
     relPos = new Vector3D(0, 0, 0);
 
     animationData = {
