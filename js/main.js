@@ -1,4 +1,4 @@
 window.onload = () => {
-    const assets = new Assets();
-    assets.load().then(() => new Game(assets).update());
+    const game = new Game(new Assets());
+    game.assets.load().then(game.loop());
 }

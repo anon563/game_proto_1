@@ -2,10 +2,11 @@ class Assets {
     images = new Object;
     imageDataList = [
         { id: 'noeru', src: 'img/noeru_alt.png' },
-        { id: 'furea', src: 'img/furea_alt.png' },
-        { id: 'furea2', src: 'img/furea2_alt.png' },
-        { id: 'furea3', src: 'img/furea3.png' },
+        { id: 'idle', src: 'img/furea_alt.png' },
+        { id: 'walk', src: 'img/furea2_alt.png' },
+        { id: 'jump', src: 'img/furea3.png' },
         { id: 'road', src: 'img/road.png' },
+        { id: 'kintsuba', src: 'img/kintsuba.png' },
         { id: 'shadow', src: 'img/shadow.png' }
     ];
     
