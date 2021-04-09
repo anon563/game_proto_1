@@ -11,7 +11,14 @@ class Fuutan {
     dir = new Vector3D(1, 0, 0);
     vel = new Vector3D(0, 0, 0);
     pos = new Vector3D(32, 128, 0);
-    relPos = new Vector3D(0, 0, 0);
+    relPos = null;
+    size = new Vector3D(12, 12, 64);
+    relSize = null;
+
+    // collisionBox = new CollisionBox3D(this.pos, new Vector3D(10, 10, 20));
+
+    closestNaan = null;
+    maxDistance = 96;
 
     animationData = {
         idle: {
@@ -36,13 +43,21 @@ class Fuutan {
             speed: 1
         }
     }
+    
+    constructor(game) {
+        this.relPos = this.pos.dot(game.relAxis).round();
+        this.relSize = this.size.dot(game.relAxis).round();
+    }
 
     update = game => {
         const keys = game.keys;
 
+        // Check target
+        this.closestNaan = game.actors.filter(actor => actor instanceof Naan).reduce((a, b) => this.pos.distance(a.pos) < this.pos.distance(b.pos) ? a : b);
+
         // Action
         this.isGrounded = !this.pos.z;
-        this.isWalking = this.isGrounded && (keys.down || keys.up || keys.left || keys.right);
+        this.isWalking = this.isGrounded && (keys.down !== keys.up || keys.left !== keys.right);
 
         // Velocity
         this.vel = this.vel.dot(this.momentum);
@@ -52,12 +67,12 @@ class Fuutan {
             -this.gravity
         ));
         // Jump & Gravity correction
-        if (this.isGrounded) this.vel.z = keys.a ? 4 : 0;
+        if (this.isGrounded) this.vel.z = keys.jump ? 4 : 0;
 
         // Direction
         this.dir = new Vector3D(
-            keys.left === keys.right ? this.dir.x : keys.left ? -1 : 1,
-            keys.up === keys.down ? this.dir.y : keys.up ? -1 : 1,
+            keys.left === keys.right ? (keys.up === keys.down ? this.dir.x : 0) : (keys.left ? -1 : 1),
+            keys.up === keys.down ? (keys.left === keys.right ? this.dir.y : 0) : (keys.up ? -1 : 1),
             0
         );
 
@@ -84,5 +99,12 @@ class Fuutan {
             this.relPos.x - animation.width / 2 + animation.xOffset, this.relPos.y - this.relPos.z - animation.height,
             animation.width, animation.height
         );
+
+        cx.fillStyle = "#00f8";
+        // cx.fillRect(this.relPos.x - this.relSize.x / 2, this.relPos.y - this.relSize.y - this.relPos.z, this.relSize.x, this.relSize.y);
+        cx.fillStyle = "#f008";
+        // cx.fillRect(this.relPos.x - this.relSize.x / 2, this.relPos.y - this.relSize.y - this.relPos.z - this.relSize.z / 2, this.relSize.x, this.relSize.y);
     }
+    
+    gameFilter = game => true;
 }

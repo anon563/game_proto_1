@@ -7,7 +7,9 @@ class Assets {
         { id: 'jump', src: 'img/furea3.png' },
         { id: 'road', src: 'img/road.png' },
         { id: 'kintsuba', src: 'img/kintsuba.png' },
-        { id: 'shadow', src: 'img/shadow.png' }
+        { id: 'bullet', src: 'img/bullet.png' },
+        { id: 'shadow', src: 'img/shadow.png' },
+        { id: 'naan', src: 'img/naan.png' }
     ];
     
     constructor() {

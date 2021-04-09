@@ -1,5 +1,4 @@
 class Game {
-    actionIndex = 0;
     relAxis = new Vector3D(2, 1, 1);
 
     canvas = document.createElement('canvas');
@@ -8,8 +7,11 @@ class Game {
     zoom = 3;
 
     actors = [
-        new Fuutan(),
+        new Fuutan(this),
         new Noeru(),
+        new Naan(this, new Vector3D(128, 64, 0)),
+        new Naan(this, new Vector3D(128, 128, 0)),
+        new Naan(this, new Vector3D(96, 192, 0)),
         new Kintsuba()
     ];
 
@@ -26,23 +28,16 @@ class Game {
     }
 
     loop = () => {
-        this.update();
-        this.display();
-        requestAnimationFrame(this.loop);
-    }
-    
-    update = () => {
-        this.actors.forEach(actor => actor.update(this));
-        this.actionIndex++;
-    }
-
-    display = () => {
+        // Background
         this.cx.drawImage(this.assets.images['road'], 0, 0, 512, 312);
-        this.actors.sort((a, b) => a.relPos.y - b.relPos.y).forEach(actor => {
+        // Actors
+        this.actors.filter(actor => actor.gameFilter(this)).sort((a, b) => a.relPos.y - b.relPos.y).forEach(actor => {
+            actor.update(this);
             this.cx.save();
             actor.display(this);
             this.cx.restore();
         });
+        requestAnimationFrame(this.loop);
     }
 
     resize = () => {

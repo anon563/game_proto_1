@@ -20,4 +20,6 @@ class Noeru {
             this.relPos.x - 16, this.relPos.y - this.relPos.z - 48, 32, 48
         );
     }
+    
+    gameFilter = game => true;
 }
