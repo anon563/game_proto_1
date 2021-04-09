@@ -1,12 +1,14 @@
-class Kintsuba {
+class Kintsuba extends Actor {
     actionIndex = 0;
 
-    pos = new Vector3D(32, 128, 0);
-    relPos = new Vector3D(0, 0, 0);
     target = new Vector3D(0, 0, 0);
     dir = null;
 
     cooldown = 0;
+
+    constructor(pos, size) {
+        super(pos, size);
+    }
 
     update = game => {
         const fuutan = game.actors.find(actor => actor instanceof Fuutan);
@@ -19,7 +21,7 @@ class Kintsuba {
                 : fuutan.closestNaan && fuutan.pos.distance(fuutan.closestNaan.pos) < fuutan.maxDistance
                     ? this.pos.plus(fuutan.closestNaan.pos.times(-1)).times(-1 / this.pos.distance(fuutan.closestNaan.pos))
                     : this.dir.plus(new Vector3D(0, 0, -0.5));
-            game.actors.push(new Bullet(game, this.pos.plus(new Vector3D(0, 0, 8)), dir));
+            game.actors.push(new Bullet(this.pos.plus(new Vector3D(0, 0, 8)), new Vector3D(8, 8, 8), dir));
         }
 
         if (this.cooldown) this.cooldown--;
@@ -40,14 +42,12 @@ class Kintsuba {
         this.actionIndex++;
     }
 
-    display = game => {
-        const cx = game.cx;
-        const assets = game.assets;
+    display = (cx, assets, pos) => {
         
         cx.drawImage(
             assets.images['kintsuba'],
             0, 0, 24, 32,
-            this.relPos.x - 12, this.relPos.y - this.relPos.z - 32, 24, 32
+            pos.x - 12, pos.y - pos.z - 32, 24, 32
         );
     }
     

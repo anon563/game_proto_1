@@ -1,31 +1,33 @@
-class Bullet {
+class Bullet extends Actor {
     actionIndex = 0;
 
     speed = 4;
+    hit = false;
 
-    constructor(game, pos, dir) {
-        this.pos = pos;
+    constructor(pos, size, dir) {
+        super(pos, size);
         this.dir = dir;
-        this.relPos = this.pos.dot(game.relAxis).round();
     }
 
     update = game => {
         this.pos = this.pos.plus(this.dir.times(this.speed));
-        this.relPos = this.pos.dot(game.relAxis).round();
+
+        const target = game.actors.find(actor => actor instanceof Naan && new CollisionBox3D(actor.pos, actor.size).collidesWith(new CollisionBox3D(this.pos, this.size)));
+        if (target) {
+            this.hit = true;
+            if (target.health) target.health--;
+        }
 
         this.actionIndex++;
     }
 
-    display = game => {
-        const cx = game.cx;
-        const assets = game.assets;
-
+    display = (cx, assets, pos) => {
         cx.drawImage(
             assets.images['bullet'],
-            this.pos.z > 0 ? 0 : 16, 0, 16, 16,
-            this.relPos.x - 8, this.relPos.y - this.relPos.z - 16, 16, 16
+            !this.hit && this.pos.z >= 0 ? 0 : 16, 0, 16, 16,
+            pos.x - 8, pos.y - pos.z - 16, 16, 16
         );
     }
 
-    gameFilter = game => this.pos.z >= 0;
+    gameFilter = game => !this.hit && this.pos.z >= 0;
 }

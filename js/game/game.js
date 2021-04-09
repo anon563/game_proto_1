@@ -7,12 +7,12 @@ class Game {
     zoom = 3;
 
     actors = [
-        new Fuutan(this),
-        new Noeru(),
-        new Naan(this, new Vector3D(128, 64, 0)),
-        new Naan(this, new Vector3D(128, 128, 0)),
-        new Naan(this, new Vector3D(96, 192, 0)),
-        new Kintsuba()
+        new Fuutan(new Vector3D(32, 128, 0), new Vector3D(8, 8, 64)),
+        new Noeru(new Vector3D(64, 64, 0), new Vector3D(8, 8, 64)),
+        new Naan(new Vector3D(128, 64, 0), new Vector3D(10, 10, 32)),
+        new Naan(new Vector3D(128, 128, 0), new Vector3D(10, 10, 32)),
+        new Naan(new Vector3D(96, 192, 0), new Vector3D(10, 10, 32)),
+        new Kintsuba(new Vector3D(32, 128, 0), new Vector3D(8, 8, 32))
     ];
 
     constructor(assets) {
@@ -31,10 +31,12 @@ class Game {
         // Background
         this.cx.drawImage(this.assets.images['road'], 0, 0, 512, 312);
         // Actors
-        this.actors.filter(actor => actor.gameFilter(this)).sort((a, b) => a.relPos.y - b.relPos.y).forEach(actor => {
+        this.actors = this.actors.filter(actor => actor.gameFilter(this));
+        this.actors.sort((a, b) => a.pos.y - b.pos.y).forEach(actor => {
             actor.update(this);
             this.cx.save();
-            actor.display(this);
+            actor.display(this.cx, this.assets, actor.pos.dot(this.relAxis).round());
+            if (DEBUGMODE) actor.displayCollisionBox(this.cx, this.relAxis);
             this.cx.restore();
         });
         requestAnimationFrame(this.loop);
@@ -46,11 +48,5 @@ class Game {
         this.canvas.height = size;
         this.cx.imageSmoothingEnabled = false;
         this.cx.scale(this.zoom, this.zoom);
-    }
-
-    flipHorizontally = around => {
-        this.cx.translate(around, 0);
-        this.cx.scale(-1, 1);
-        this.cx.translate(-around, 0);
     }
 }
