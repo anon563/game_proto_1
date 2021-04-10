@@ -3,16 +3,13 @@ class Game {
 
     canvas = document.createElement('canvas');
     cx = this.canvas.getContext('2d');
-
-    zoom = 3;
+    width = 480;
+    height = 270;
 
     actors = [
-        new Fuutan(new Vector3D(32, 128, 0), new Vector3D(8, 8, 64)),
-        new Noeru(new Vector3D(64, 64, 0), new Vector3D(8, 8, 64)),
-        new Naan(new Vector3D(128, 64, 0), new Vector3D(10, 10, 32)),
-        new Naan(new Vector3D(128, 128, 0), new Vector3D(10, 10, 32)),
-        new Naan(new Vector3D(96, 192, 0), new Vector3D(10, 10, 32)),
-        new Kintsuba(new Vector3D(32, 128, 0), new Vector3D(8, 8, 32))
+        new Fuutan(new Vector3D(142, 140, 0), new Vector3D(8, 8, 64)),
+        new Noeru(new Vector3D(96, 130, 0), new Vector3D(8, 8, 64)),
+        new Kintsuba(new Vector3D(142, 140, 0), new Vector3D(8, 8, 32))
     ];
 
     constructor(assets) {
@@ -27,9 +24,18 @@ class Game {
         this.keys = new KeyboardListener().keys;
     }
 
+    addNaan = () => {
+        const pos = Math.random() > 0.5
+            ? new Vector3D(Math.random() > 0.5 ? 0 : 240, Math.round(Math.random() * 270), 0)
+            : new Vector3D(Math.round(Math.random() * 240), Math.random() > 0.5 ? 0 : 270, 0);
+        this.actors.push(new Naan(pos, new Vector3D(10, 10, 32)));
+    }
+
     loop = () => {
         // Background
         this.cx.drawImage(this.assets.images['road'], 0, 0, 512, 312);
+
+        if (Math.random() > 0.97) this.addNaan();
         // Actors
         this.actors = this.actors.filter(actor => actor.gameFilter(this));
         this.actors.sort((a, b) => a.pos.y - b.pos.y).forEach(actor => {
@@ -42,10 +48,11 @@ class Game {
         requestAnimationFrame(this.loop);
     }
 
+    // Resize canvas
     resize = () => {
-        const size = Math.min(innerWidth, innerHeight);
-        this.canvas.width = size;
-        this.canvas.height = size;
+        this.zoom = Math.max(1, Math.min(Math.floor(innerWidth / this.width), Math.floor(innerHeight / this.height)));
+        this.canvas.width = this.width * this.zoom;
+        this.canvas.height = this.height * this.zoom;
         this.cx.imageSmoothingEnabled = false;
         this.cx.scale(this.zoom, this.zoom);
     }

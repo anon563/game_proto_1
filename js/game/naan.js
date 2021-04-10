@@ -1,15 +1,20 @@
 class Naan extends Actor {
     actionIndex = 0;
 
-    maxHealth = 50;
+    maxHealth = 4;
     health = this.maxHealth;
+    
+    target = null;
 
     constructor(pos, size) {
         super(pos, size);
     }
 
     update = game => {
-        // if (this.health) this.health--;
+        const noeru = game.actors.find(actor => actor instanceof Noeru);
+        
+        this.pos = this.pos.lerp(noeru.pos, 0.003);
+
         this.actionIndex++;
     }
 

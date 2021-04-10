@@ -1,7 +1,7 @@
 class Kintsuba extends Actor {
     actionIndex = 0;
 
-    target = new Vector3D(0, 0, 0);
+    target = null;
     dir = null;
 
     cooldown = 0;
@@ -17,10 +17,10 @@ class Kintsuba extends Actor {
         if (!this.cooldown && game.keys.shoot) {
             this.cooldown = 8;
             const dir = game.keys.focus
-                ? this.dir.plus(new Vector3D(0, 0, -0.25))
+                ? this.dir.plus(new Vector3D(0, 0, -0.125))
                 : fuutan.closestNaan && fuutan.pos.distance(fuutan.closestNaan.pos) < fuutan.maxDistance
                     ? this.pos.plus(fuutan.closestNaan.pos.times(-1)).times(-1 / this.pos.distance(fuutan.closestNaan.pos))
-                    : this.dir.plus(new Vector3D(0, 0, -0.5));
+                    : this.dir.plus(new Vector3D(0, 0, -0.25));
             game.actors.push(new Bullet(this.pos.plus(new Vector3D(0, 0, 8)), new Vector3D(8, 8, 8), dir));
         }
 

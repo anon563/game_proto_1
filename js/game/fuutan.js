@@ -7,11 +7,11 @@ class Fuutan extends Actor {
     momentum = new Vector3D(0.7, 0.7, 1);
     gravity = 0.25;
     
-    dir = new Vector3D(1, 0, 0);
+    dir = new Vector3D(-1, 0, 0);
     vel = new Vector3D(0, 0, 0);
 
     closestNaan = null;
-    maxDistance = 96;
+    maxDistance = 128;
 
     animationData = {
         idle: {
